@@ -1,8 +1,8 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import LoginPage from '../pages/LoginPage';
-import RegisterPage from '../pages/RegisterPage';
-import DashboardPage from '../pages/DashboardPage';
-import ListPage from '../components/lists/ListPage';
+import LoginPage from '@/pages/LoginPage';
+import RegisterPage from '@/pages/RegisterPage';
+import DashboardPage from '@/pages/DashboardPage';
+import ListPage from '@/pages/ListPage';
 import { AuthLayout } from '@/layouts/AuthLayout';
 import DashboardLayout from '@/layouts/DashboardLayout';
 
@@ -18,7 +18,7 @@ export const router = createBrowserRouter([
   },
   {
     path: '/',
-    element: <DashboardLayout children={undefined} />,
+    element: <DashboardLayout />,
     children: [
       { path: 'dashboard', element: <DashboardPage /> },
       { path: 'lists/:id', element: <ListPage /> },

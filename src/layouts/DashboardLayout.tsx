@@ -1,14 +1,12 @@
 import React, { useState } from "react";
-import SidebarContent from "@/components/sidebar/Sidebar"; // Default export is SidebarContent
+import SidebarContent from "@/components/sidebar/Sidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Menu } from "lucide-react";
 
-interface DashboardLayoutProps {
-  children: React.ReactNode;
-}
+import { Outlet } from "react-router-dom";
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -40,7 +38,9 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
         </Sheet>
       </div>
 
-      <main className="flex-1 md:ml-[280px] p-4 sm:p-6">{children}</main>
+      <main className="flex-1 md:ml-[280px] p-4 sm:p-6">
+        <Outlet />
+      </main>
     </div>
   );
 };
