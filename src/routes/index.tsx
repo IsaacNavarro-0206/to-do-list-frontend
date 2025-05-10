@@ -3,7 +3,7 @@ import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import DashboardPage from '../pages/DashboardPage';
 import ListPage from '../components/lists/ListPage';
-import { AuthLayout } from '@/components/auth/AuthLayout';
+import { AuthLayout } from '@/components/layouts/AuthLayout';
 
 export const router = createBrowserRouter([
   {
