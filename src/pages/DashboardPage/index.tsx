@@ -1,7 +1,18 @@
-export default function DashboardPage() {
+import React from "react";
+import DashboardLayout from "@/layouts/DashboardLayout";
+import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import ListsContainer from "@/components/dashboard/ListsContainer";
+
+const DashboardPage: React.FC = () => {
   return (
-    <div>
-      <h1>Dashboard Page</h1>
-    </div>
+    <DashboardLayout>
+      <div className="flex flex-col gap-6 p-4 md:p-8">
+        <DashboardHeader />
+
+        <ListsContainer />
+      </div>
+    </DashboardLayout>
   );
-}
+};
+
+export default DashboardPage;
