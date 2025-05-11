@@ -10,7 +10,7 @@ interface CreateTaskData {
 interface UpdateTaskData {
   title: string;
   description?: string;
-  completed: boolean;
+  done: boolean;
 }
 
 export function getTasks(listId: string) {

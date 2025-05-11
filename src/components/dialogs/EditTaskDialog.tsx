@@ -30,7 +30,7 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
       const obj = {
         title: data.title,
         description: data.description,
-        completed: task.completed,
+        done: task.done,
       };
 
       console.log("Updating task:", obj);

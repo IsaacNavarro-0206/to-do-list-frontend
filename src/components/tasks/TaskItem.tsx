@@ -9,12 +9,14 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal, Edit, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { toast } from "sonner";
+import { updateTask } from "@/services/tasks";
 
 export interface Task {
   id: string;
   title: string;
   description?: string;
-  completed: boolean;
+  done: boolean;
   listId: string;
 }
 
@@ -31,11 +33,25 @@ const TaskItem: React.FC<TaskItemProps> = ({
   onEdit,
   onDelete,
 }) => {
-  const [isCompleted, setIsCompleted] = useState(task.completed);
+  const [isCompleted, setIsCompleted] = useState(task.done);
 
-  const handleToggleComplete = () => {
-    setIsCompleted(!isCompleted);
-    onToggleComplete(task.id); // Simulate API call or state update
+  const handleToggleComplete = async () => {
+    try {
+      const obj = {
+        title: task.title,
+        description: task.description,
+        done: !isCompleted,
+      };
+
+      await updateTask(task.id, obj);
+      setIsCompleted(!isCompleted);
+      onToggleComplete(task.id);
+
+      toast.success("Tarea completada exitosamente");
+    } catch (error) {
+      console.error("Error al actualizar la tarea:", error);
+      toast.error("Error al actualizar la tarea");
+    }
   };
 
   return (

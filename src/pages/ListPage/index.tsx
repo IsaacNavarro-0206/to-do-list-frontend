@@ -42,7 +42,7 @@ const ListPage: React.FC = () => {
   const handleToggleComplete = (taskId: string) => {
     setTasks((prevTasks) =>
       prevTasks.map((task) =>
-        task.id === taskId ? { ...task, completed: !task.completed } : task
+        task.id === taskId ? { ...task, done: !task.done } : task
       )
     );
   };
@@ -77,8 +77,8 @@ const ListPage: React.FC = () => {
     }
   };
 
-  const pendingTasks = tasks.filter((task) => !task.completed);
-  const completedTasks = tasks.filter((task) => task.completed);
+  const pendingTasks = tasks.filter((task) => !task.done);
+  const completedTasks = tasks.filter((task) => task.done);
 
   if (isLoading) {
     return (
