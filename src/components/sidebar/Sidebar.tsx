@@ -1,5 +1,5 @@
 import React from "react";
-import { Home, List, LogOut, X } from "lucide-react";
+import { Home, List, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLists } from "@/contexts/ListsContext";
@@ -7,15 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Link, useLocation } from "react-router-dom";
 import { getUserInfo } from "@/utils/getUserInfo";
 
-interface SidebarProps {
-  isMobileOpen?: boolean;
-  onMobileClose?: () => void;
-}
-
-const SidebarContent: React.FC<SidebarProps> = ({
-  isMobileOpen,
-  onMobileClose,
-}) => {
+const SidebarContent: React.FC = () => {
   const { lists, isLoading } = useLists();
   const { logout } = useAuth();
   const location = useLocation();
@@ -27,16 +19,6 @@ const SidebarContent: React.FC<SidebarProps> = ({
     <div className="flex flex-col h-full">
       <div className="flex items-center justify-between p-4 border-b">
         <h1 className="text-xl font-semibold">TaskMaster</h1>
-        {isMobileOpen && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onMobileClose}
-            className="md:hidden"
-          >
-            <X className="h-5 w-5" />
-          </Button>
-        )}
       </div>
 
       <nav className="flex-1 p-4 space-y-1">
@@ -115,24 +97,12 @@ const SidebarContent: React.FC<SidebarProps> = ({
   );
 };
 
-export const Sidebar: React.FC<SidebarProps> = ({
-  isMobileOpen,
-  onMobileClose,
-}) => {
+export const Sidebar: React.FC = () => {
   return (
     <>
       <aside className="hidden md:block w-[280px] border-r h-screen overflow-auto fixed top-0 left-0 bg-background">
         <SidebarContent />
       </aside>
-
-      {isMobileOpen !== undefined && (
-        <div className="md:hidden">
-          <SidebarContent
-            isMobileOpen={isMobileOpen}
-            onMobileClose={onMobileClose}
-          />
-        </div>
-      )}
     </>
   );
 };

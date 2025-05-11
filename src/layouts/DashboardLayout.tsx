@@ -30,10 +30,7 @@ const DashboardLayout: React.FC = () => {
           </SheetTrigger>
 
           <SheetContent side="left" className="w-[280px] p-0">
-            <SidebarContent
-              isMobileOpen={true}
-              onMobileClose={() => setIsMobileMenuOpen(false)}
-            />
+            <SidebarContent />
           </SheetContent>
         </Sheet>
       </div>
