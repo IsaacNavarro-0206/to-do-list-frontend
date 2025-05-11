@@ -29,7 +29,7 @@ export function createList(data: ListData) {
 
 export function updateList(listId: string, data: ListData) {
   return axiosInstance<List>({
-    method: "PUT",
+    method: "PATCH",
     url: `/lists/${listId}`,
     data,
   });

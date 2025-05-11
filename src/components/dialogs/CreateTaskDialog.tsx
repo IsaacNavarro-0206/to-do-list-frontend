@@ -6,6 +6,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { TaskForm, type TaskFormValues } from "@/components/forms/TaskForm";
+import { createTask } from "@/services/tasks";
+import { toast } from "sonner";
 
 interface CreateTaskDialogProps {
   open: boolean;
@@ -20,11 +22,12 @@ export const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
 }) => {
   const handleSubmit = async (data: TaskFormValues) => {
     try {
-      // TODO: Implementar la llamada a la API
+      await createTask(data);
       console.log("Creating task:", data);
       onOpenChange(false);
     } catch (error) {
       console.error("Error creating task:", error);
+      toast.error("Error al crear la tarea");
     }
   };
 

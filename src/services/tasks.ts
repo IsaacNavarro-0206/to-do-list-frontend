@@ -30,7 +30,7 @@ export function createTask(data: CreateTaskData) {
 
 export function updateTask(taskId: string, data: UpdateTaskData) {
   return axiosInstance<Task>({
-    method: "PUT",
+    method: "PATCH",
     url: `/tasks/${taskId}`,
     data,
   });

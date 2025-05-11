@@ -7,6 +7,8 @@ import {
 } from "@/components/ui/dialog";
 import { TaskForm, type TaskFormValues } from "@/components/forms/TaskForm";
 import type { Task } from "@/components/tasks/TaskItem";
+import { updateTask } from "@/services/tasks";
+import { toast } from "sonner";
 
 interface EditTaskDialogProps {
   open: boolean;
@@ -21,11 +23,19 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
 }) => {
   const handleSubmit = async (data: TaskFormValues) => {
     try {
-      // TODO: Implementar la llamada a la API
-      console.log("Updating task:", { ...task, ...data });
+      const obj = {
+        title: data.title,
+        description: data.description,
+        completed: task.completed,
+      };
+
+      console.log("Updating task:", obj);
+
+      await updateTask(task.id, obj);
       onOpenChange(false);
     } catch (error) {
       console.error("Error updating task:", error);
+      toast.error("Error al actualizar la tarea");
     }
   };
 
@@ -35,9 +45,9 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Editar Tarea</DialogTitle>
         </DialogHeader>
-        
+
         <TaskForm task={task} listId={task.listId} onSubmit={handleSubmit} />
       </DialogContent>
     </Dialog>
   );
-}; 
+};

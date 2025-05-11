@@ -10,38 +10,11 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { CreateTaskDialog } from "@/components/dialogs/CreateTaskDialog";
 import { EditTaskDialog } from "@/components/dialogs/EditTaskDialog";
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
-
-// Mock data for tasks
-const mockTasks: Task[] = [
-  { id: "task-1", title: "Comprar leche y huevos", completed: false, listId: "" },
-  {
-    id: "task-2",
-    title: "Preparar presentación para el lunes",
-    completed: false,
-    listId: "",
-  },
-  { id: "task-3", title: "Llamar al dentista", completed: true, listId: "" },
-  { id: "task-4", title: "Pagar facturas de servicios", completed: false, listId: "" },
-  { id: "task-5", title: "Leer capítulo 3 del libro", completed: true, listId: "" },
-];
-
-// Simulate fetching list details
-const fetchListDetails = async (listId: string) => {
-  console.log(`Fetching list details for ${listId}...`);
-  return new Promise<{ id: string; name: string; tasks: Task[] }>((resolve) => {
-    setTimeout(() => {
-      resolve({
-        id: listId,
-        name: `Lista de Tareas ${listId.toUpperCase()}`,
-        tasks: mockTasks.map(task => ({ ...task, listId })),
-      });
-    }, 1500);
-  });
-};
+import { getTasks } from "@/services/tasks";
+import { toast } from "sonner";
 
 const ListPage: React.FC = () => {
   const { id: listId } = useParams<{ id: string }>();
-  const [listName, setListName] = useState<string>("");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
@@ -50,16 +23,20 @@ const ListPage: React.FC = () => {
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   useEffect(() => {
-    if (listId) {
-      setIsLoading(true);
-      fetchListDetails(listId)
-        .then((data) => {
-          setListName(data.name);
-          setTasks(data.tasks);
-        })
-        .catch((error) => console.error("Error fetching list details:", error))
-        .finally(() => setIsLoading(false));
-    }
+    const fetchTasks = async () => {
+      try {
+        setIsLoading(true);
+        const response = await getTasks(listId as string);
+        setTasks(response.data);
+      } catch (error) {
+        console.error("Error fetching tasks:", error);
+        toast.error("Error al cargar las tareas");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchTasks();
   }, [listId]);
 
   const handleToggleComplete = (taskId: string) => {
@@ -92,7 +69,9 @@ const ListPage: React.FC = () => {
 
   const handleDeleteConfirm = () => {
     if (selectedTask) {
-      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== selectedTask.id));
+      setTasks((prevTasks) =>
+        prevTasks.filter((task) => task.id !== selectedTask.id)
+      );
       setIsDeleteTaskOpen(false);
       setSelectedTask(null);
     }
@@ -143,9 +122,10 @@ const ListPage: React.FC = () => {
           </Button>
 
           <h1 className="text-2xl md:text-3xl font-bold tracking-tight">
-            {listName}
+            Lista de tareas
           </h1>
         </div>
+
         <Button onClick={handleAddTask}>
           <PlusCircle className="mr-2 h-4 w-4" /> Agregar Tarea
         </Button>
