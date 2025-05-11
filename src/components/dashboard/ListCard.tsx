@@ -53,7 +53,7 @@ const ListCard: React.FC<ListCardProps> = ({ id, title, list }) => {
     <>
       <Link to={`/lists/${id}`}>
         <Card className="h-full transition-all hover:shadow-md flex flex-col">
-          <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-2">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <div className="space-y-1">
               <CardTitle>{title}</CardTitle>
             </div>
