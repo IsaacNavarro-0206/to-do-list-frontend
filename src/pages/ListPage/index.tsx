@@ -9,7 +9,7 @@ import EmptyState from "@/components/common/EmptyState";
 import { CreateTaskDialog } from "@/components/dialogs/CreateTaskDialog";
 import { EditTaskDialog } from "@/components/dialogs/EditTaskDialog";
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
-import { getTasks } from "@/services/tasks";
+import { getTasks, deleteTask } from "@/services/tasks";
 import { toast } from "sonner";
 import SkeletonTasks from "@/components/skeleton/SkeletonTasks";
 
@@ -69,13 +69,23 @@ const ListPage: React.FC = () => {
     setIsCreateTaskOpen(true);
   };
 
-  const handleDeleteConfirm = () => {
+  const handleDeleteConfirm = async () => {
     if (selectedTask) {
-      setTasks((prevTasks) =>
-        prevTasks.filter((task) => task.id !== selectedTask.id)
-      );
-      setIsDeleteTaskOpen(false);
-      setSelectedTask(null);
+      try {
+        await deleteTask(selectedTask.id);
+
+        setTasks((prevTasks) =>
+          prevTasks.filter((task) => task.id !== selectedTask.id)
+        );
+
+        setIsDeleteTaskOpen(false);
+        setSelectedTask(null);
+
+        toast.success("Tarea eliminada exitosamente");
+      } catch (error) {
+        console.error("Error deleting task:", error);
+        toast.error("Error al eliminar la tarea");
+      }
     }
   };
 
