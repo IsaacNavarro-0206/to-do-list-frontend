@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,23 +5,29 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ListForm, type ListFormValues } from "@/components/forms/ListForm";
+import { createList } from "@/services/lists";
+import { toast } from "sonner";
 
 interface CreateListDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onListCreated?: () => void;
 }
 
 export const CreateListDialog: React.FC<CreateListDialogProps> = ({
   open,
   onOpenChange,
+  onListCreated,
 }) => {
   const handleSubmit = async (data: ListFormValues) => {
     try {
-      // TODO: Implementar la llamada a la API
-      console.log("Creating list:", data);
+      await createList(data);
+      toast.success("Lista creada exitosamente");
       onOpenChange(false);
+      onListCreated?.();
     } catch (error) {
       console.error("Error creating list:", error);
+      toast.error("Error al crear la lista");
     }
   };
 
@@ -32,9 +37,9 @@ export const CreateListDialog: React.FC<CreateListDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Crear Nueva Lista</DialogTitle>
         </DialogHeader>
-        
+
         <ListForm onSubmit={handleSubmit} />
       </DialogContent>
     </Dialog>
   );
-}; 
+};

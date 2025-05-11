@@ -6,29 +6,35 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ListForm, type ListFormValues } from "@/components/forms/ListForm";
+import { updateList } from "@/services/lists";
+import { toast } from "sonner";
 
 interface EditListDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   list: {
     id: string;
-    name: string;
+    title: string;
     description?: string;
   };
+  onListUpdated?: () => void;
 }
 
 export const EditListDialog: React.FC<EditListDialogProps> = ({
   open,
   onOpenChange,
   list,
+  onListUpdated,
 }) => {
   const handleSubmit = async (data: ListFormValues) => {
     try {
-      // TODO: Implementar la llamada a la API
-      console.log("Updating list:", { ...list, ...data });
+      await updateList(list.id, data);
+      toast.success("Lista actualizada exitosamente");
       onOpenChange(false);
+      onListUpdated?.();
     } catch (error) {
       console.error("Error updating list:", error);
+      toast.error("Error al actualizar la lista");
     }
   };
 
@@ -43,4 +49,4 @@ export const EditListDialog: React.FC<EditListDialogProps> = ({
       </DialogContent>
     </Dialog>
   );
-}; 
+};

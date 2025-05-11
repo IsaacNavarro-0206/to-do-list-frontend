@@ -2,18 +2,13 @@ import axiosInstance from "@/lib/axios";
 
 interface List {
   id: string;
-  name: string;
+  title: string;
   description?: string;
   userId: string;
 }
 
-interface CreateListData {
-  name: string;
-  description?: string;
-}
-
-interface UpdateListData {
-  name: string;
+interface ListData {
+  title: string;
   description?: string;
 }
 
@@ -24,7 +19,7 @@ export function getLists() {
   });
 }
 
-export function createList(data: CreateListData) {
+export function createList(data: ListData) {
   return axiosInstance<List>({
     method: "POST",
     url: "/lists",
@@ -32,7 +27,7 @@ export function createList(data: CreateListData) {
   });
 }
 
-export function updateList(listId: string, data: UpdateListData) {
+export function updateList(listId: string, data: ListData) {
   return axiosInstance<List>({
     method: "PUT",
     url: `/lists/${listId}`,

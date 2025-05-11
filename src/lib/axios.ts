@@ -3,6 +3,9 @@ import axios from "axios";
 // Crear una instancia de axios con la configuración base
 const axiosInstance = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
 });
 
 // Interceptor para agregar el token a las peticiones
@@ -28,6 +31,7 @@ axiosInstance.interceptors.response.use(
     if (error.response?.status === 401) {
       // Limpiar el token y redirigir al login
       localStorage.removeItem("token");
+      localStorage.removeItem("user");
       window.location.href = "/login";
     }
     return Promise.reject(error);

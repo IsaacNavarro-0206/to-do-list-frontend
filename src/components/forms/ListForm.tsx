@@ -14,17 +14,17 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
-const schema = yup.object().shape({
-  name: yup.string().required("El nombre es requerido"),
-  description: yup.string().optional(),
-});
+const schema = yup.object({
+  title: yup.string().required("El nombre es requerido"),
+  description: yup.string().optional().default(""),
+}).required();
 
 export type ListFormValues = yup.InferType<typeof schema>;
 
 interface ListFormProps {
   list?: {
     id: string;
-    name: string;
+    title: string;
     description?: string;
   };
   onSubmit: (data: ListFormValues) => void;
@@ -39,7 +39,7 @@ export const ListForm: React.FC<ListFormProps> = ({
   const form = useForm<ListFormValues>({
     resolver: yupResolver(schema),
     defaultValues: {
-      name: list?.name || "",
+      title: list?.title || "",
       description: list?.description || "",
     },
   });
@@ -49,7 +49,7 @@ export const ListForm: React.FC<ListFormProps> = ({
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
         <FormField
           control={form.control}
-          name="name"
+          name="title"
           render={({ field }) => (
             <FormItem>
               <FormLabel>Nombre</FormLabel>
