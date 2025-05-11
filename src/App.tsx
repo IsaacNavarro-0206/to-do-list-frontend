@@ -2,7 +2,6 @@ import { RouterProvider } from "react-router-dom";
 import { router } from "./routes";
 import { Toaster } from "sonner";
 import { AuthProvider } from "./contexts/AuthContext";
-import { ListsProvider } from "./contexts/ListsContext";
 
 function App() {
   return (
@@ -10,9 +9,7 @@ function App() {
       <Toaster />
 
       <AuthProvider>
-        <ListsProvider>
-          <RouterProvider router={router} />
-        </ListsProvider>
+        <RouterProvider router={router} />;
       </AuthProvider>
     </>
   );

@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ListCard from "./ListCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useLists } from "@/contexts/ListsContext";
+import { getLists } from "@/services/lists";
+import { toast } from "sonner";
+
+interface List {
+  id: string;
+  title: string;
+  description?: string;
+  userId: string;
+}
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center p-8 text-center">
@@ -13,7 +21,25 @@ const EmptyState = () => (
 );
 
 const ListsContainer: React.FC = () => {
-  const { lists, isLoading } = useLists();
+  const [isLoading, setIsLoading] = useState(true);
+  const [lists, setLists] = useState<List[]>([]);
+
+  const fetchLists = async () => {
+    try {
+      setIsLoading(true);
+      const response = await getLists();
+      setLists(response.data);
+    } catch (error) {
+      console.error("Error fetching lists:", error);
+      toast.error("Error al cargar las listas");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchLists();
+  }, []);
 
   if (isLoading) {
     return (

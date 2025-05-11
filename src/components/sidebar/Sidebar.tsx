@@ -2,9 +2,6 @@ import React from "react";
 import { Home, List, LogOut, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useLists } from "@/contexts/ListsContext";
-import { useAuth } from "@/contexts/AuthContext";
-import { Link, useLocation } from "react-router-dom";
 
 interface SidebarProps {
   isMobileOpen?: boolean;
@@ -15,11 +12,16 @@ const SidebarContent: React.FC<SidebarProps> = ({
   isMobileOpen,
   onMobileClose,
 }) => {
-  const { lists, isLoading } = useLists();
-  const { user, logout } = useAuth();
-  const location = useLocation();
-
   const links = [{ href: "/dashboard", label: "Dashboard", icon: Home }];
+
+  const taskLists = [
+    { href: "/lists/1", label: "Trabajo" },
+    { href: "/lists/2", label: "Personal" },
+    { href: "/lists/3", label: "Estudios" },
+  ];
+
+  // Simula una ruta activa para demostración
+  const activePath = "/dashboard";
 
   return (
     <div className="flex flex-col h-full">
@@ -37,20 +39,20 @@ const SidebarContent: React.FC<SidebarProps> = ({
         )}
       </div>
 
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 p-4 space-y-2 overflow-auto">
         {links.map((link) => (
-          <Link
+          <a
             key={link.href}
-            to={link.href}
+            href={link.href}
             className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-              location.pathname === link.href
+              activePath === link.href
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-muted"
             }`}
           >
             <link.icon className="h-4 w-4" />
             {link.label}
-          </Link>
+          </a>
         ))}
 
         <div className="pt-4">
@@ -59,30 +61,20 @@ const SidebarContent: React.FC<SidebarProps> = ({
           </h2>
 
           <div className="space-y-1">
-            {isLoading ? (
-              <div className="px-3 py-2 text-sm text-muted-foreground">
-                Cargando listas...
-              </div>
-            ) : lists.length === 0 ? (
-              <div className="px-3 py-2 text-sm text-muted-foreground">
-                No hay listas
-              </div>
-            ) : (
-              lists.map((list) => (
-                <Link
-                  key={list.id}
-                  to={`/lists/${list.id}`}
-                  className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
-                    location.pathname === `/lists/${list.id}`
-                      ? "bg-primary text-primary-foreground"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <List className="h-4 w-4" />
-                  {list.title}
-                </Link>
-              ))
-            )}
+            {taskLists.map((list) => (
+              <a
+                key={list.href}
+                href={list.href}
+                className={`flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors ${
+                  activePath === list.href
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-muted"
+                }`}
+              >
+                <List className="h-4 w-4" />
+                {list.label}
+              </a>
+            ))}
           </div>
         </div>
       </nav>
@@ -91,15 +83,15 @@ const SidebarContent: React.FC<SidebarProps> = ({
         <div className="flex items-center gap-3">
           <Avatar className="h-9 w-9">
             <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" />
-            <AvatarFallback>{user?.name?.[0] || "U"}</AvatarFallback>
+            <AvatarFallback>CN</AvatarFallback>
           </Avatar>
 
           <div>
-            <p className="text-sm font-medium">{user?.name || "Usuario"}</p>
-            <p className="text-xs text-muted-foreground">{user?.email}</p>
+            <p className="text-sm font-medium">Usuario Demo</p>
+            <p className="text-xs text-muted-foreground">demo@example.com</p>
           </div>
 
-          <Button variant="ghost" size="icon" className="ml-auto" onClick={logout}>
+          <Button variant="ghost" size="icon" className="ml-auto">
             <LogOut className="h-5 w-5" />
           </Button>
         </div>
