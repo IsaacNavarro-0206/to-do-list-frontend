@@ -2,7 +2,7 @@ import axios from "axios";
 
 // Crear una instancia de axios con la configuración base
 const axiosInstance = axios.create({
-  baseURL: import.meta.env.VITE_API_URL_LOCAL,
+  baseURL: import.meta.env.VITE_API_URL,
 });
 
 // Interceptor para agregar el token a las peticiones

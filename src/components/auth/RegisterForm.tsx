@@ -20,6 +20,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { register } from "@/services/auth";
+import { toast } from "sonner";
 
 interface RegisterFormData {
   name: string;
@@ -53,6 +55,7 @@ export function RegisterForm(): JSX.Element {
 
   const form = useForm<RegisterFormData>({
     resolver: yupResolver(registerSchema),
+    mode: "onChange",
     defaultValues: {
       name: "",
       email: "",
@@ -64,13 +67,22 @@ export function RegisterForm(): JSX.Element {
   const onSubmit = async (data: RegisterFormData): Promise<void> => {
     try {
       setIsLoading(true);
-      // TODO: Implement register logic here
+
       console.log(data);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      navigate("/dashboard");
+
+      const obj = {
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      };
+
+      await register(obj);
+      toast.success("Cuenta creada correctamente");
+
+      navigate("/login");
     } catch (error) {
       console.error(error);
+      toast.error("Error al crear la cuenta");
     } finally {
       setIsLoading(false);
     }
@@ -188,7 +200,10 @@ export function RegisterForm(): JSX.Element {
 
         <div className="mt-6 text-center text-sm text-gray-300">
           ¿Ya tienes una cuenta?{" "}
-          <Link to="/login" className="text-white underline hover:text-gray-300">
+          <Link
+            to="/login"
+            className="text-white underline hover:text-gray-300"
+          >
             Inicia sesión
           </Link>
         </div>

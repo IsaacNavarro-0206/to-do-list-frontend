@@ -20,6 +20,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { login } from "@/services/auth";
+import { toast } from "sonner";
 
 interface LoginFormData {
   email: string;
@@ -52,13 +54,16 @@ export function LoginForm(): JSX.Element {
   const onSubmit = async (data: LoginFormData): Promise<void> => {
     try {
       setIsLoading(true);
-      // TODO: Implement login logic here
+
       console.log(data);
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      await login(data);
+      toast.success("Inicio de sesión exitoso");
+
       navigate("/dashboard");
     } catch (error) {
       console.error(error);
+      toast.error("Error al iniciar sesión");
     } finally {
       setIsLoading(false);
     }
