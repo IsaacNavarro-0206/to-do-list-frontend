@@ -8,6 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { Link } from "react-router-dom";
 
 interface ListCardProps {
   id: string;
@@ -19,6 +20,7 @@ interface ListCardProps {
 }
 
 const ListCard: React.FC<ListCardProps> = ({
+  id,
   title,
   description,
   tasksCompleted,
@@ -29,30 +31,32 @@ const ListCard: React.FC<ListCardProps> = ({
     totalTasks > 0 ? (tasksCompleted / totalTasks) * 100 : 0;
 
   return (
-    <Card className="h-full transition-all hover:shadow-md flex flex-col">
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        {description && <CardDescription>{description}</CardDescription>}
-      </CardHeader>
+    <Link to={`/lists/${id}`}>
+      <Card className="h-full transition-all hover:shadow-md flex flex-col">
+        <CardHeader>
+          <CardTitle>{title}</CardTitle>
+          {description && <CardDescription>{description}</CardDescription>}
+        </CardHeader>
 
-      <CardContent className="flex-grow">
-        <div className="space-y-2">
-          <div>
-            <Progress value={progressPercentage} className="h-2" />
+        <CardContent className="flex-grow">
+          <div className="space-y-2">
+            <div>
+              <Progress value={progressPercentage} className="h-2" />
+            </div>
+
+            <p className="text-sm text-muted-foreground">
+              {tasksCompleted} de {totalTasks} tareas completadas
+            </p>
           </div>
+        </CardContent>
 
-          <p className="text-sm text-muted-foreground">
-            {tasksCompleted} de {totalTasks} tareas completadas
+        <CardFooter>
+          <p className="text-xs text-muted-foreground">
+            Última actualización: {lastUpdated}
           </p>
-        </div>
-      </CardContent>
-
-      <CardFooter>
-        <p className="text-xs text-muted-foreground">
-          Última actualización: {lastUpdated}
-        </p>
-      </CardFooter>
-    </Card>
+        </CardFooter>
+      </Card>
+    </Link>
   );
 };
 
