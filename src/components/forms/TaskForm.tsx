@@ -17,7 +17,7 @@ import type { Task } from "@/components/tasks/TaskItem";
 
 const schema = yup.object().shape({
   title: yup.string().required("El título es requerido"),
-  description: yup.string().optional(),
+  description: yup.string().optional().default(""),
   listId: yup.string().required("El ID de la lista es requerido"),
 });
 
