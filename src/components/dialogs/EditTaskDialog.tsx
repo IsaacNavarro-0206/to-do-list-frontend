@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -9,6 +8,7 @@ import { TaskForm, type TaskFormValues } from "@/components/forms/TaskForm";
 import type { Task } from "@/components/tasks/TaskItem";
 import { updateTask } from "@/services/tasks";
 import { toast } from "sonner";
+import { useState } from "react";
 
 interface EditTaskDialogProps {
   open: boolean;
@@ -21,8 +21,12 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
   onOpenChange,
   task,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const handleSubmit = async (data: TaskFormValues) => {
     try {
+      setIsLoading(true);
+
       const obj = {
         title: data.title,
         description: data.description,
@@ -36,6 +40,8 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
     } catch (error) {
       console.error("Error updating task:", error);
       toast.error("Error al actualizar la tarea");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -46,7 +52,12 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
           <DialogTitle>Editar Tarea</DialogTitle>
         </DialogHeader>
 
-        <TaskForm task={task} listId={task.listId} onSubmit={handleSubmit} />
+        <TaskForm
+          task={task}
+          listId={task.listId}
+          onSubmit={handleSubmit}
+          isLoading={isLoading}
+        />
       </DialogContent>
     </Dialog>
   );
