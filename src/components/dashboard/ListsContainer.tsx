@@ -1,7 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import ListCard from "./ListCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useLists } from "@/contexts/ListsContext";
+import type { Task } from "../tasks/TaskItem";
+import { getTasks } from "@/services/tasks";
+
+interface ListCard {
+  id: string;
+  title: string;
+  tasks: Task[];
+}
 
 const EmptyState = () => (
   <div className="flex flex-col items-center justify-center p-8 text-center">
@@ -13,7 +21,26 @@ const EmptyState = () => (
 );
 
 const ListsContainer: React.FC = () => {
-  const { lists, isLoading } = useLists();
+  const { lists: contextLists, isLoading } = useLists();
+  const [lists, setLists] = useState<ListCard[]>([]);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      const listsWithTasks = await Promise.all(
+        contextLists.map(async (list) => {
+          const { data: tasks } = await getTasks(list.id);
+
+          return { ...list, tasks };
+        })
+      );
+
+      setLists(listsWithTasks);
+    };
+
+    if (!isLoading && contextLists.length > 0) {
+      fetchTasks();
+    }
+  }, [contextLists, isLoading]);
 
   if (isLoading) {
     return (
@@ -38,14 +65,7 @@ const ListsContainer: React.FC = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {lists.map((list) => (
-        <ListCard
-          key={list.id}
-          id={list.id}
-          title={list.title}
-          tasksCompleted={0} // TODO: Implement task counting
-          totalTasks={0} // TODO: Implement task counting
-          lastUpdated="Hace un momento" // TODO: Implement last updated time
-        />
+        <ListCard key={list.id} id={list.id} title={list.title} list={list} />
       ))}
     </div>
   );
