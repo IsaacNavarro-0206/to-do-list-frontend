@@ -6,7 +6,7 @@ import { toast } from "sonner";
 
 interface List {
   id: string;
-  name: string;
+  title: string;
   description?: string;
   userId: string;
 }
@@ -67,7 +67,7 @@ const ListsContainer: React.FC = () => {
         <ListCard
           key={list.id}
           id={list.id}
-          title={list.name}
+          title={list.title}
           description={list.description}
           tasksCompleted={0} // TODO: Implement task counting
           totalTasks={0} // TODO: Implement task counting
