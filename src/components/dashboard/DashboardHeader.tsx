@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { CreateListDialog } from "@/components/dialogs/CreateListDialog";
-import { useAuth } from "@/contexts/AuthContext";
+import { getUserInfo } from "@/utils/getUserInfo";
 
 interface DashboardHeaderProps {
   onListCreated?: () => void;
@@ -10,7 +10,7 @@ interface DashboardHeaderProps {
 
 const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onListCreated }) => {
   const [isCreateListOpen, setIsCreateListOpen] = useState(false);
-  const { user } = useAuth();
+  const user = getUserInfo();
 
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
