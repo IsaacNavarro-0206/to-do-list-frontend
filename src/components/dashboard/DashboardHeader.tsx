@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { CreateListDialog } from "@/components/dialogs/CreateListDialog";
 
 const DashboardHeader: React.FC = () => {
+  const [isCreateListOpen, setIsCreateListOpen] = useState(false);
+
   return (
     <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
@@ -15,10 +18,15 @@ const DashboardHeader: React.FC = () => {
         </p>
       </div>
 
-      <Button>
+      <Button onClick={() => setIsCreateListOpen(true)}>
         <PlusCircle className="mr-2 h-4 w-4" />
         Nueva Lista
       </Button>
+
+      <CreateListDialog
+        open={isCreateListOpen}
+        onOpenChange={setIsCreateListOpen}
+      />
     </div>
   );
 };

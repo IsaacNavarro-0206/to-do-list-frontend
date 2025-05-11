@@ -7,18 +7,22 @@ import TaskItem from "@/components/tasks/TaskItem";
 import type { Task } from "@/components/tasks/TaskItem";
 import EmptyState from "@/components/common/EmptyState";
 import { Skeleton } from "@/components/ui/skeleton";
+import { CreateTaskDialog } from "@/components/dialogs/CreateTaskDialog";
+import { EditTaskDialog } from "@/components/dialogs/EditTaskDialog";
+import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 
 // Mock data for tasks
 const mockTasks: Task[] = [
-  { id: "task-1", title: "Comprar leche y huevos", completed: false },
+  { id: "task-1", title: "Comprar leche y huevos", completed: false, listId: "" },
   {
     id: "task-2",
     title: "Preparar presentación para el lunes",
     completed: false,
+    listId: "",
   },
-  { id: "task-3", title: "Llamar al dentista", completed: true },
-  { id: "task-4", title: "Pagar facturas de servicios", completed: false },
-  { id: "task-5", title: "Leer capítulo 3 del libro", completed: true },
+  { id: "task-3", title: "Llamar al dentista", completed: true, listId: "" },
+  { id: "task-4", title: "Pagar facturas de servicios", completed: false, listId: "" },
+  { id: "task-5", title: "Leer capítulo 3 del libro", completed: true, listId: "" },
 ];
 
 // Simulate fetching list details
@@ -29,12 +33,9 @@ const fetchListDetails = async (listId: string) => {
       resolve({
         id: listId,
         name: `Lista de Tareas ${listId.toUpperCase()}`,
-        tasks: mockTasks.map((task) => ({
-          ...task,
-          id: `${listId}-${task.id}`,
-        })), // Ensure unique task IDs for different lists
+        tasks: mockTasks.map(task => ({ ...task, listId })),
       });
-    }, 1500); // Simulate network delay
+    }, 1500);
   });
 };
 
@@ -43,6 +44,10 @@ const ListPage: React.FC = () => {
   const [listName, setListName] = useState<string>("");
   const [tasks, setTasks] = useState<Task[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+  const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
+  const [isDeleteTaskOpen, setIsDeleteTaskOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   useEffect(() => {
     if (listId) {
@@ -66,22 +71,31 @@ const ListPage: React.FC = () => {
   };
 
   const handleEditTask = (taskId: string) => {
-    // Placeholder for edit functionality
-    console.log(`Edit task: ${taskId}`);
-    alert(`Funcionalidad de editar tarea "${taskId}" no implementada.`);
+    const task = tasks.find((t) => t.id === taskId);
+    if (task) {
+      setSelectedTask(task);
+      setIsEditTaskOpen(true);
+    }
   };
 
   const handleDeleteTask = (taskId: string) => {
-    // Placeholder for delete functionality
-    setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
-    alert(
-      `Funcionalidad de eliminar tarea "${taskId}" no implementada (solo visual).`
-    );
+    const task = tasks.find((t) => t.id === taskId);
+    if (task) {
+      setSelectedTask(task);
+      setIsDeleteTaskOpen(true);
+    }
   };
 
   const handleAddTask = () => {
-    // Placeholder for add task functionality
-    alert("Funcionalidad de agregar nueva tarea no implementada.");
+    setIsCreateTaskOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (selectedTask) {
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== selectedTask.id));
+      setIsDeleteTaskOpen(false);
+      setSelectedTask(null);
+    }
   };
 
   const pendingTasks = tasks.filter((task) => !task.completed);
@@ -198,6 +212,33 @@ const ListPage: React.FC = () => {
               </p>
             )}
           </section>
+        </>
+      )}
+
+      {/* Diálogos */}
+      {listId && (
+        <CreateTaskDialog
+          open={isCreateTaskOpen}
+          onOpenChange={setIsCreateTaskOpen}
+          listId={listId}
+        />
+      )}
+
+      {selectedTask && (
+        <>
+          <EditTaskDialog
+            open={isEditTaskOpen}
+            onOpenChange={setIsEditTaskOpen}
+            task={selectedTask}
+          />
+
+          <DeleteConfirmationDialog
+            open={isDeleteTaskOpen}
+            onOpenChange={setIsDeleteTaskOpen}
+            title="Eliminar tarea"
+            description="¿Estás seguro de que quieres eliminar esta tarea? Esta acción no se puede deshacer."
+            onConfirm={handleDeleteConfirm}
+          />
         </>
       )}
     </div>

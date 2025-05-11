@@ -14,6 +14,7 @@ export interface Task {
   id: string;
   title: string;
   completed: boolean;
+  listId: string;
 }
 
 interface TaskItemProps {
