@@ -15,9 +15,9 @@ const SidebarContent: React.FC<SidebarProps> = ({
   const links = [{ href: "/dashboard", label: "Dashboard", icon: Home }];
 
   const taskLists = [
-    { href: "/dashboard/list/1", label: "Trabajo" },
-    { href: "/dashboard/list/2", label: "Personal" },
-    { href: "/dashboard/list/3", label: "Estudios" },
+    { href: "/lists/1", label: "Trabajo" },
+    { href: "/lists/2", label: "Personal" },
+    { href: "/lists/3", label: "Estudios" },
   ];
 
   // Simula una ruta activa para demostración
