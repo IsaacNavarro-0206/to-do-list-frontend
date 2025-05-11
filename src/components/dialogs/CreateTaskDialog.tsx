@@ -13,12 +13,14 @@ interface CreateTaskDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   listId: string;
+  setIsUpdateViewTasks: (updateViewTasks: boolean) => void;
 }
 
 export const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
   open,
   onOpenChange,
   listId,
+  setIsUpdateViewTasks,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -29,6 +31,7 @@ export const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
       await createTask(data);
       console.log("Creating task:", data);
 
+      setIsUpdateViewTasks(true);
       onOpenChange(false);
     } catch (error) {
       console.error("Error creating task:", error);

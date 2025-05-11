@@ -17,7 +17,7 @@ import { Textarea } from "@/components/ui/textarea";
 const schema = yup.object({
   title: yup.string().required("El nombre es requerido"),
   description: yup.string().optional().default(""),
-}).required();
+});
 
 export type ListFormValues = yup.InferType<typeof schema>;
 

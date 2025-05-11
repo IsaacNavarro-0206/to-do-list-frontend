@@ -6,12 +6,12 @@ import { ArrowLeft, PlusCircle, FileText, CheckCircle2 } from "lucide-react";
 import TaskItem from "@/components/tasks/TaskItem";
 import type { Task } from "@/components/tasks/TaskItem";
 import EmptyState from "@/components/common/EmptyState";
-import { Skeleton } from "@/components/ui/skeleton";
 import { CreateTaskDialog } from "@/components/dialogs/CreateTaskDialog";
 import { EditTaskDialog } from "@/components/dialogs/EditTaskDialog";
 import { DeleteConfirmationDialog } from "@/components/dialogs/DeleteConfirmationDialog";
 import { getTasks } from "@/services/tasks";
 import { toast } from "sonner";
+import SkeletonTasks from "@/components/skeleton/SkeletonTasks";
 
 const ListPage: React.FC = () => {
   const { id: listId } = useParams<{ id: string }>();
@@ -21,6 +21,7 @@ const ListPage: React.FC = () => {
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [isDeleteTaskOpen, setIsDeleteTaskOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [isUpdateViewTasks, setIsUpdateViewTasks] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -32,12 +33,13 @@ const ListPage: React.FC = () => {
         console.error("Error fetching tasks:", error);
         toast.error("Error al cargar las tareas");
       } finally {
+        setIsUpdateViewTasks(false);
         setIsLoading(false);
       }
     };
 
     fetchTasks();
-  }, [listId]);
+  }, [listId, isUpdateViewTasks]);
 
   const handleToggleComplete = (taskId: string) => {
     setTasks((prevTasks) =>
@@ -80,36 +82,6 @@ const ListPage: React.FC = () => {
   const pendingTasks = tasks.filter((task) => !task.done);
   const completedTasks = tasks.filter((task) => task.done);
 
-  if (isLoading) {
-    return (
-      <div className="container mx-auto p-4 md:p-6">
-        <div className="flex items-center justify-between mb-6">
-          <Skeleton className="h-8 w-1/4" />
-          <Skeleton className="h-10 w-24" />
-        </div>
-        <Skeleton className="h-10 w-36 mb-6" />
-
-        <div className="mb-8">
-          <Skeleton className="h-6 w-1/5 mb-4" />
-          <div className="space-y-3">
-            {[...Array(3)].map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
-            ))}
-          </div>
-        </div>
-
-        <div>
-          <Skeleton className="h-6 w-1/5 mb-4" />
-          <div className="space-y-3">
-            {[...Array(2)].map((_, i) => (
-              <Skeleton key={i} className="h-12 w-full" />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="container mx-auto p-4 md:p-6">
       <header className="flex items-center justify-between mb-6">
@@ -141,7 +113,7 @@ const ListPage: React.FC = () => {
         />
       )}
 
-      {tasks.length > 0 && (
+      {tasks.length > 0 && !isLoading ? (
         <>
           <section className="mb-8">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
@@ -193,6 +165,8 @@ const ListPage: React.FC = () => {
             )}
           </section>
         </>
+      ) : (
+        <SkeletonTasks />
       )}
 
       {/* Diálogos */}
@@ -201,6 +175,7 @@ const ListPage: React.FC = () => {
           open={isCreateTaskOpen}
           onOpenChange={setIsCreateTaskOpen}
           listId={listId}
+          setIsUpdateViewTasks={setIsUpdateViewTasks}
         />
       )}
 
@@ -210,6 +185,7 @@ const ListPage: React.FC = () => {
             open={isEditTaskOpen}
             onOpenChange={setIsEditTaskOpen}
             task={selectedTask}
+            setIsUpdateViewTasks={setIsUpdateViewTasks}
           />
 
           <DeleteConfirmationDialog

@@ -14,12 +14,14 @@ interface EditTaskDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   task: Task;
+  setIsUpdateViewTasks: (updateViewTasks: boolean) => void;
 }
 
 export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
   open,
   onOpenChange,
   task,
+  setIsUpdateViewTasks,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -36,6 +38,8 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
       console.log("Updating task:", obj);
 
       await updateTask(task.id, obj);
+
+      setIsUpdateViewTasks(true);
       onOpenChange(false);
     } catch (error) {
       console.error("Error updating task:", error);
