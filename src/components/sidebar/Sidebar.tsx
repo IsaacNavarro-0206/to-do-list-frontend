@@ -5,6 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useLists } from "@/contexts/ListsContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { Link, useLocation } from "react-router-dom";
+import { getUserInfo } from "@/utils/getUserInfo";
 
 interface SidebarProps {
   isMobileOpen?: boolean;
@@ -16,8 +17,9 @@ const SidebarContent: React.FC<SidebarProps> = ({
   onMobileClose,
 }) => {
   const { lists, isLoading } = useLists();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
   const location = useLocation();
+  const user = getUserInfo();
 
   const links = [{ href: "/dashboard", label: "Dashboard", icon: Home }];
 
@@ -99,7 +101,12 @@ const SidebarContent: React.FC<SidebarProps> = ({
             <p className="text-xs text-muted-foreground">{user?.email}</p>
           </div>
 
-          <Button variant="ghost" size="icon" className="ml-auto" onClick={logout}>
+          <Button
+            variant="ghost"
+            size="icon"
+            className="ml-auto"
+            onClick={logout}
+          >
             <LogOut className="h-5 w-5" />
           </Button>
         </div>
