@@ -2,7 +2,6 @@ import React from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,7 +12,6 @@ import { Link } from "react-router-dom";
 interface ListCardProps {
   id: string;
   title: string;
-  description?: string;
   tasksCompleted: number;
   totalTasks: number;
   lastUpdated: string;
@@ -22,7 +20,6 @@ interface ListCardProps {
 const ListCard: React.FC<ListCardProps> = ({
   id,
   title,
-  description,
   tasksCompleted,
   totalTasks,
   lastUpdated,
@@ -35,7 +32,6 @@ const ListCard: React.FC<ListCardProps> = ({
       <Card className="h-full transition-all hover:shadow-md flex flex-col">
         <CardHeader>
           <CardTitle>{title}</CardTitle>
-          {description && <CardDescription>{description}</CardDescription>}
         </CardHeader>
 
         <CardContent className="flex-grow">

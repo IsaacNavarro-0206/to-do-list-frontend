@@ -12,12 +12,10 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import type { Task } from "@/components/tasks/TaskItem";
 
 const schema = yup.object().shape({
   title: yup.string().required("El título es requerido"),
-  description: yup.string().optional().default(""),
   listId: yup.string().required("El ID de la lista es requerido"),
 });
 
@@ -40,8 +38,7 @@ export const TaskForm: React.FC<TaskFormProps> = ({
     resolver: yupResolver(schema),
     defaultValues: {
       title: task?.title || "",
-      description: task?.description || "",
-      listId: listId,
+      listId,
     },
   });
 
@@ -62,27 +59,14 @@ export const TaskForm: React.FC<TaskFormProps> = ({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Descripción (opcional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Ingresa una descripción para la tarea"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Guardando..." : task ? "Actualizar Tarea" : "Crear Tarea"}
+          {isLoading
+            ? "Guardando..."
+            : task
+            ? "Actualizar Tarea"
+            : "Crear Tarea"}
         </Button>
       </form>
     </Form>
   );
-}; 
+};

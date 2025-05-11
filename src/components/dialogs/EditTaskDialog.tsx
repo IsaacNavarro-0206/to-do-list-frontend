@@ -31,7 +31,6 @@ export const EditTaskDialog: React.FC<EditTaskDialogProps> = ({
 
       const obj = {
         title: data.title,
-        description: data.description,
         done: task.done,
       };
 

@@ -12,11 +12,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 
 const schema = yup.object({
   title: yup.string().required("El nombre es requerido"),
-  description: yup.string().optional().default(""),
 });
 
 export type ListFormValues = yup.InferType<typeof schema>;
@@ -25,7 +23,6 @@ interface ListFormProps {
   list?: {
     id: string;
     title: string;
-    description?: string;
   };
   onSubmit: (data: ListFormValues) => void;
   isLoading?: boolean;
@@ -40,7 +37,6 @@ export const ListForm: React.FC<ListFormProps> = ({
     resolver: yupResolver(schema),
     defaultValues: {
       title: list?.title || "",
-      description: list?.description || "",
     },
   });
 
@@ -61,27 +57,14 @@ export const ListForm: React.FC<ListFormProps> = ({
           )}
         />
 
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Descripción (opcional)</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="Ingresa una descripción para la lista"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-
         <Button type="submit" className="w-full" disabled={isLoading}>
-          {isLoading ? "Guardando..." : list ? "Actualizar Lista" : "Crear Lista"}
+          {isLoading
+            ? "Guardando..."
+            : list
+            ? "Actualizar Lista"
+            : "Crear Lista"}
         </Button>
       </form>
     </Form>
   );
-}; 
+};

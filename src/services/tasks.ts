@@ -3,13 +3,11 @@ import type { Task } from "@/components/tasks/TaskItem";
 
 interface CreateTaskData {
   title: string;
-  description?: string;
   listId: string;
 }
 
 interface UpdateTaskData {
   title: string;
-  description?: string;
   done: boolean;
 }
 

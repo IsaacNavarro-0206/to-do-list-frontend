@@ -1,9 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useState,
-  useEffect,
-} from "react";
+import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { getLists, createList, updateList, deleteList } from "@/services/lists";
 import { toast } from "sonner";
@@ -11,7 +6,6 @@ import { toast } from "sonner";
 interface List {
   id: string;
   title: string;
-  description?: string;
   userId: string;
 }
 
@@ -19,13 +13,10 @@ interface ListsContextType {
   lists: List[];
   isLoading: boolean;
   fetchLists: () => Promise<void>;
-  createNewList: (data: {
-    title: string;
-    description?: string;
-  }) => Promise<void>;
+  createNewList: (data: { title: string }) => Promise<void>;
   updateExistingList: (
     listId: string,
-    data: { title: string; description?: string }
+    data: { title: string }
   ) => Promise<void>;
   deleteExistingList: (listId: string) => Promise<void>;
 }
@@ -49,10 +40,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const createNewList = async (data: {
-    title: string;
-    description?: string;
-  }) => {
+  const createNewList = async (data: { title: string }) => {
     try {
       const response = await createList(data);
       setLists((prevLists) => [...prevLists, response.data]);
@@ -66,7 +54,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
 
   const updateExistingList = async (
     listId: string,
-    data: { title: string; description?: string }
+    data: { title: string }
   ) => {
     try {
       const response = await updateList(listId, data);

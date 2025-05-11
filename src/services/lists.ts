@@ -3,13 +3,11 @@ import axiosInstance from "@/lib/axios";
 interface List {
   id: string;
   title: string;
-  description?: string;
   userId: string;
 }
 
 interface ListData {
   title: string;
-  description?: string;
 }
 
 export function getLists() {

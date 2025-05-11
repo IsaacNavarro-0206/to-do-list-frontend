@@ -42,7 +42,6 @@ const ListsContainer: React.FC = () => {
           key={list.id}
           id={list.id}
           title={list.title}
-          description={list.description}
           tasksCompleted={0} // TODO: Implement task counting
           totalTasks={0} // TODO: Implement task counting
           lastUpdated="Hace un momento" // TODO: Implement last updated time

@@ -15,7 +15,6 @@ import { updateTask } from "@/services/tasks";
 export interface Task {
   id: string;
   title: string;
-  description?: string;
   done: boolean;
   listId: string;
 }
@@ -39,7 +38,6 @@ const TaskItem: React.FC<TaskItemProps> = ({
     try {
       const obj = {
         title: task.title,
-        description: task.description,
         done: !isCompleted,
       };
 
@@ -84,24 +82,18 @@ const TaskItem: React.FC<TaskItemProps> = ({
 
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-8 w-8">
+          <Button variant="ghost" className="h-8 w-8 p-0">
             <MoreHorizontal className="h-4 w-4" />
-            <span className="sr-only">Abrir menú de opciones</span>
           </Button>
         </DropdownMenuTrigger>
-
         <DropdownMenuContent align="end">
           <DropdownMenuItem onClick={() => onEdit(task.id)}>
             <Edit className="mr-2 h-4 w-4" />
-            <span>Editar</span>
+            Editar
           </DropdownMenuItem>
-
-          <DropdownMenuItem
-            onClick={() => onDelete(task.id)}
-            className="text-red-600 hover:!text-red-600 hover:!bg-red-100 dark:hover:!bg-red-700/50"
-          >
+          <DropdownMenuItem onClick={() => onDelete(task.id)} className="text-red-600">
             <Trash2 className="mr-2 h-4 w-4" />
-            <span>Eliminar</span>
+            Eliminar
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
