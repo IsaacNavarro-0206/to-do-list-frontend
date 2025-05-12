@@ -123,7 +123,9 @@ const ListPage: React.FC = () => {
         />
       )}
 
-      {tasks.length > 0 && !isLoading ? (
+      {isLoading && <SkeletonTasks />}
+
+      {tasks.length > 0 && (
         <>
           <section className="mb-8">
             <h2 className="text-xl font-semibold mb-4 flex items-center">
@@ -175,8 +177,6 @@ const ListPage: React.FC = () => {
             )}
           </section>
         </>
-      ) : (
-        <SkeletonTasks />
       )}
 
       {/* Diálogos */}
