@@ -8,19 +8,20 @@ import {
 import { TaskForm, type TaskFormValues } from "@/components/forms/TaskForm";
 import { createTask } from "@/services/tasks";
 import { toast } from "sonner";
+import type { Task } from "@/components/tasks/TaskItem";
 
 interface CreateTaskDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   listId: string;
-  setIsUpdateViewTasks: (updateViewTasks: boolean) => void;
+  setTasks: React.Dispatch<React.SetStateAction<Task[]>>;
 }
 
 export const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
   open,
   onOpenChange,
   listId,
-  setIsUpdateViewTasks,
+  setTasks,
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
@@ -28,10 +29,9 @@ export const CreateTaskDialog: React.FC<CreateTaskDialogProps> = ({
     try {
       setIsLoading(true);
 
-      await createTask(data);
-      console.log("Creating task:", data);
+      const response = await createTask(data);
+      setTasks((prevTasks) => [...prevTasks, response.data]);
 
-      setIsUpdateViewTasks(true);
       onOpenChange(false);
     } catch (error) {
       console.error("Error creating task:", error);

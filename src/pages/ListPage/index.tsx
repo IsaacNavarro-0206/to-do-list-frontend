@@ -21,7 +21,6 @@ const ListPage: React.FC = () => {
   const [isEditTaskOpen, setIsEditTaskOpen] = useState(false);
   const [isDeleteTaskOpen, setIsDeleteTaskOpen] = useState(false);
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
-  const [isUpdateViewTasks, setIsUpdateViewTasks] = useState(false);
 
   useEffect(() => {
     const fetchTasks = async () => {
@@ -33,13 +32,12 @@ const ListPage: React.FC = () => {
         console.error("Error fetching tasks:", error);
         toast.error("Error al cargar las tareas");
       } finally {
-        setIsUpdateViewTasks(false);
         setIsLoading(false);
       }
     };
 
     fetchTasks();
-  }, [listId, isUpdateViewTasks]);
+  }, [listId]);
 
   const handleToggleComplete = (taskId: string) => {
     setTasks((prevTasks) =>
@@ -185,7 +183,7 @@ const ListPage: React.FC = () => {
           open={isCreateTaskOpen}
           onOpenChange={setIsCreateTaskOpen}
           listId={listId}
-          setIsUpdateViewTasks={setIsUpdateViewTasks}
+          setTasks={setTasks}
         />
       )}
 
@@ -195,7 +193,7 @@ const ListPage: React.FC = () => {
             open={isEditTaskOpen}
             onOpenChange={setIsEditTaskOpen}
             task={selectedTask}
-            setIsUpdateViewTasks={setIsUpdateViewTasks}
+            setTasks={setTasks}
           />
 
           <DeleteConfirmationDialog
