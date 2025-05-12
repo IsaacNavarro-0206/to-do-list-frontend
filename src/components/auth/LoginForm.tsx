@@ -58,11 +58,9 @@ export function LoginForm(): JSX.Element {
     try {
       setIsLoading(true);
 
-      console.log(data);
-
       const res = await login(data);
-      localStorage.setItem("token", res.data.token);
       setToken(res.data.token);
+
       toast.success("Inicio de sesión exitoso");
 
       navigate("/dashboard");

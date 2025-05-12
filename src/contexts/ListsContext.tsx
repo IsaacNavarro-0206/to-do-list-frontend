@@ -80,7 +80,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
     try {
       await deleteList(listId);
       setLists((prevLists) => prevLists.filter((list) => list.id !== listId));
-      
+
       toast.success("Lista eliminada exitosamente");
     } catch (error) {
       console.error("Error deleting list:", error);
@@ -90,7 +90,11 @@ export function ListsProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    fetchLists();
+    if (isAuthenticated) {
+      fetchLists();
+    } else {
+      setLists([]);
+    }
   }, [isAuthenticated]);
 
   const value = {
@@ -109,6 +113,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
 
 export function useLists() {
   const context = useContext(ListsContext);
+
   if (context === undefined) {
     throw new Error("useLists must be used within a ListsProvider");
   }
