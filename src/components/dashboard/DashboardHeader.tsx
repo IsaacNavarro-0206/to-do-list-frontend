@@ -13,7 +13,7 @@ const DashboardHeader: React.FC<DashboardHeaderProps> = ({ onListCreated }) => {
   const user = getUserInfo();
 
   return (
-    <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <div className="mt-5 md:mt-auto flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
       <div>
         <h1 className="text-2xl font-bold tracking-tight md:text-3xl">
           Hola, {user?.name || "Usuario"}
