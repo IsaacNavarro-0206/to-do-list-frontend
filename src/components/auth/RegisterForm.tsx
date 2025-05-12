@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { register } from "@/services/auth";
 import { toast } from "sonner";
+import { regex } from "@/regex";
 
 interface RegisterFormData {
   name: string;
@@ -37,11 +38,14 @@ const registerSchema = yup.object({
     .min(2, "El nombre debe tener al menos 2 caracteres"),
   email: yup
     .string()
-    .email("Ingresa un correo electrónico válido")
+    .matches(regex.emailRegex, "Ingresa un correo electrónico válido")
     .required("El correo electrónico es requerido"),
   password: yup
     .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
+    .matches(
+      regex.passwordRegex,
+      "La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un símbolo"
+    )
     .required("La contraseña es requerida"),
   confirmPassword: yup
     .string()

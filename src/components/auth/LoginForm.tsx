@@ -23,6 +23,7 @@ import {
 import { login } from "@/services/auth";
 import { toast } from "sonner";
 import { useAuth } from "@/contexts/AuthContext";
+import { regex } from "@/regex";
 
 interface LoginFormData {
   email: string;
@@ -32,12 +33,9 @@ interface LoginFormData {
 const loginSchema = yup.object({
   email: yup
     .string()
-    .email("Ingresa un correo electrónico válido")
+    .matches(regex.emailRegex, "Ingresa un correo electrónico válido")
     .required("El correo electrónico es requerido"),
-  password: yup
-    .string()
-    .min(6, "La contraseña debe tener al menos 6 caracteres")
-    .required("La contraseña es requerida"),
+  password: yup.string().required("La contraseña es requerida"),
 });
 
 export function LoginForm(): JSX.Element {
