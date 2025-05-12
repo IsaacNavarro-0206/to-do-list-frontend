@@ -35,20 +35,30 @@ const TaskItem: React.FC<TaskItemProps> = ({
   const [isCompleted, setIsCompleted] = useState(task.done);
 
   const handleToggleComplete = async () => {
+    const newCompletedState = !isCompleted;
+
     try {
       const obj = {
         title: task.title,
-        done: !isCompleted,
+        done: newCompletedState,
       };
 
-      await updateTask(task.id, obj);
-      setIsCompleted(!isCompleted);
+      setIsCompleted(newCompletedState);
       onToggleComplete(task.id);
+      await updateTask(task.id, obj);
 
-      toast.success("Tarea completada exitosamente");
+      toast.success(
+        newCompletedState
+          ? "Tarea completada exitosamente"
+          : "Tarea marcada como pendiente"
+      );
     } catch (error) {
       console.error("Error al actualizar la tarea:", error);
       toast.error("Error al actualizar la tarea");
+
+      // Revertir estados
+      setIsCompleted(!newCompletedState);
+      onToggleComplete(task.id);
     }
   };
 
@@ -91,7 +101,10 @@ const TaskItem: React.FC<TaskItemProps> = ({
             <Edit className="mr-2 h-4 w-4" />
             Editar
           </DropdownMenuItem>
-          <DropdownMenuItem onClick={() => onDelete(task.id)} className="text-red-600">
+          <DropdownMenuItem
+            onClick={() => onDelete(task.id)}
+            className="text-red-600"
+          >
             <Trash2 className="mr-2 h-4 w-4" />
             Eliminar
           </DropdownMenuItem>
