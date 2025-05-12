@@ -2,11 +2,14 @@ import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import { getLists, createList, updateList, deleteList } from "@/services/lists";
 import { toast } from "sonner";
+import { useAuth } from "./AuthContext";
+import type { Task } from "@/components/tasks/TaskItem";
 
-interface List {
+export interface List {
   id: string;
   title: string;
   userId: string;
+  tasks: Task[];
 }
 
 interface ListsContextType {
@@ -27,6 +30,8 @@ export function ListsProvider({ children }: { children: ReactNode }) {
   const [lists, setLists] = useState<List[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  const { isAuthenticated } = useAuth();
+
   const fetchLists = async () => {
     try {
       setIsLoading(true);
@@ -44,6 +49,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
     try {
       const response = await createList(data);
       setLists((prevLists) => [...prevLists, response.data]);
+
       toast.success("Lista creada exitosamente");
     } catch (error) {
       console.error("Error creating list:", error);
@@ -61,6 +67,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
       setLists((prevLists) =>
         prevLists.map((list) => (list.id === listId ? response.data : list))
       );
+
       toast.success("Lista actualizada exitosamente");
     } catch (error) {
       console.error("Error updating list:", error);
@@ -73,6 +80,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
     try {
       await deleteList(listId);
       setLists((prevLists) => prevLists.filter((list) => list.id !== listId));
+      
       toast.success("Lista eliminada exitosamente");
     } catch (error) {
       console.error("Error deleting list:", error);
@@ -83,7 +91,7 @@ export function ListsProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     fetchLists();
-  }, []);
+  }, [isAuthenticated]);
 
   const value = {
     lists,

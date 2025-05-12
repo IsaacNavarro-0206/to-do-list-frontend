@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Dialog,
   DialogContent,
@@ -6,8 +6,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ListForm, type ListFormValues } from "@/components/forms/ListForm";
-import { updateList } from "@/services/lists";
-import { toast } from "sonner";
+import { useLists } from "@/contexts/ListsContext";
 
 interface EditListDialogProps {
   open: boolean;
@@ -23,18 +22,15 @@ export const EditListDialog: React.FC<EditListDialogProps> = ({
   open,
   onOpenChange,
   list,
-  onListUpdated,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { updateExistingList } = useLists();
+
   const handleSubmit = async (data: ListFormValues) => {
-    try {
-      await updateList(list.id, data);
-      toast.success("Lista actualizada exitosamente");
-      onOpenChange(false);
-      onListUpdated?.();
-    } catch (error) {
-      console.error("Error updating list:", error);
-      toast.error("Error al actualizar la lista");
-    }
+    setIsLoading(true);
+    await updateExistingList(list.id, data);
+    onOpenChange(false);
+    setIsLoading(false);
   };
 
   return (
@@ -43,8 +39,8 @@ export const EditListDialog: React.FC<EditListDialogProps> = ({
         <DialogHeader>
           <DialogTitle>Editar Lista</DialogTitle>
         </DialogHeader>
-        
-        <ListForm list={list} onSubmit={handleSubmit} />
+
+        <ListForm list={list} onSubmit={handleSubmit} isLoading={isLoading} />
       </DialogContent>
     </Dialog>
   );

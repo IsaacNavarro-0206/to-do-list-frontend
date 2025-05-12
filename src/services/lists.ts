@@ -1,10 +1,5 @@
+import type { List } from "@/contexts/ListsContext";
 import axiosInstance from "@/lib/axios";
-
-interface List {
-  id: string;
-  title: string;
-  userId: string;
-}
 
 interface ListData {
   title: string;

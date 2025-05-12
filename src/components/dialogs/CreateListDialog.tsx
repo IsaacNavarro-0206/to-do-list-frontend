@@ -5,8 +5,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { ListForm, type ListFormValues } from "@/components/forms/ListForm";
-import { createList } from "@/services/lists";
-import { toast } from "sonner";
+import { useLists } from "@/contexts/ListsContext";
+import { useState } from "react";
 
 interface CreateListDialogProps {
   open: boolean;
@@ -17,18 +17,15 @@ interface CreateListDialogProps {
 export const CreateListDialog: React.FC<CreateListDialogProps> = ({
   open,
   onOpenChange,
-  onListCreated,
 }) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const { createNewList } = useLists();
+
   const handleSubmit = async (data: ListFormValues) => {
-    try {
-      await createList(data);
-      toast.success("Lista creada exitosamente");
-      onOpenChange(false);
-      onListCreated?.();
-    } catch (error) {
-      console.error("Error creating list:", error);
-      toast.error("Error al crear la lista");
-    }
+    setIsLoading(true);
+    await createNewList(data);
+    onOpenChange(false);
+    setIsLoading(false);
   };
 
   return (
@@ -38,7 +35,7 @@ export const CreateListDialog: React.FC<CreateListDialogProps> = ({
           <DialogTitle>Crear Nueva Lista</DialogTitle>
         </DialogHeader>
 
-        <ListForm onSubmit={handleSubmit} />
+        <ListForm onSubmit={handleSubmit} isLoading={isLoading} />
       </DialogContent>
     </Dialog>
   );

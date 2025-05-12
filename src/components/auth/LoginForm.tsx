@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/card";
 import { login } from "@/services/auth";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface LoginFormData {
   email: string;
@@ -43,6 +44,8 @@ export function LoginForm(): JSX.Element {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const navigate = useNavigate();
 
+  const { setToken } = useAuth();
+
   const form = useForm<LoginFormData>({
     resolver: yupResolver(loginSchema),
     defaultValues: {
@@ -59,6 +62,7 @@ export function LoginForm(): JSX.Element {
 
       const res = await login(data);
       localStorage.setItem("token", res.data.token);
+      setToken(res.data.token);
       toast.success("Inicio de sesión exitoso");
 
       navigate("/dashboard");
